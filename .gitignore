@@ -1,3 +1,10 @@
 /build/
 /bin/
 /lib/
+/pics/
+
+*.gch
+
+/readpic/bin/
+/readpic/build/
+/readpic/lib/
