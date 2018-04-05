@@ -1,34 +1,57 @@
-#include <iostream>
-using namespace std;
-struct Flags{
-  bool process;
-  bool capture;
-  bool octmap;
-  bool cloud;
-} flags;
+#include "utils.h"
 
 int main(int argc, char** argv){
-  //ResolvePara
-  for(int i=1; i<argc; i++){
-    if(argv[i][1] == 'r'){
-      flags.process = true;
-      cout<<"process"<<endl;
-    }
-    if(argv[i][1] == 'a'){
-      flags.capture = true;
-      cout<<"capture"<<endl;
-    }
-    if(argv[i][1] == 'l'){
-      flags.cloud = true;
-      cout<<"cloud"<<endl;
-    }
-    if(argv[i][1] == 'c'){
-      flags.octmap = true;
-      cout<<"octmap"<<endl;
-    }
-  }
-
+  //ParsePara
+  Flags flags;
+  parsePara(flags, argc, argv);
+  
   if(flags.capture){
+    pid_t pid = fork();
+    if(pid<0){
+      cout<<"error creating sub process"<<endl;
+    }
+    else if(pid == 0){
+      cout<<"Capture successfully start"<<endl;
+      if(execlp("../pics/readpic", "readpic", NULL) < 0){
+        perror("execute error");
+        return(1);
+      }
+    }
+    else {
+      wait(NULL);
+      cout<<"Capture exited, main exit"<<endl;
+    }
+
+    return 0;
+  }
+  else if(flags.process){
+    pid_t pid = fork();
+    if(pid<0){
+      cout<<"error creating sub process"<<endl;
+    }
+    else if(pid == 0){
+      cout<<"Process successfully start"<<endl;
+      if(execlp("../bin/slam", "slam", NULL) < 0){
+        perror("execute error");
+        return(1);
+      }
+    }
+    else {
+      wait(NULL);
+      cout<<"Process exited, main exit"<<endl;
+    }
+
+    return 0;
+  }
+  else if(flags.octmap){
+
+  }
+  else {
+    cout<<"try following commands"<<endl
+    <<"capture -- capture rgb images and depth images and save them"<<endl
+    <<"process -- process local pics and generate map"<<endl;
   }
 
+
+  return 0;
 }

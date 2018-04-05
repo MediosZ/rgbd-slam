@@ -56,8 +56,8 @@ int main(){
 
     int index = 1;
     stringstream ss;
-    string rgb_dir = "./rgb_png/";
-    string depth_dir = "./depth_png/";
+    string rgb_dir = "./data/rgb_png/";
+    string depth_dir = "./data/depth_png/";
     string png = ".png";
     string rgb_path = "";
     string depth_path = "";
@@ -82,7 +82,7 @@ int main(){
 
       ss<<rgb_dir<<index<<png;
       ss>>rgb_path;
-			cout<<rgb_path<<endl;
+			//cout<<rgb_path<<endl;
       imwrite(rgb_path, rgb);
       ss.clear();
       ss<<depth_dir<<index<<png;

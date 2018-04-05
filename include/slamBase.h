@@ -39,6 +39,10 @@ using namespace std;
 #include <pcl/visualization/cloud_viewer.h>
 #include <pcl/filters/voxel_grid.h>
 
+//octomap
+#include <octomap/octomap.h>
+#include <octomap/ColorOcTree.h>
+
 // 类型定义
 typedef pcl::PointXYZRGBA PointT;
 typedef pcl::PointCloud<PointT> PointCloud;
@@ -64,7 +68,8 @@ struct RESULT_OF_PNP
     cv::Mat rvec, tvec;
     int inliers;
 };
-int Capture();
+
+octomap::ColorOcTree createOctmap(PointCloud::Ptr cloud);
 
 
 // 函数接口

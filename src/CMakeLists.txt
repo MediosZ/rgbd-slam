@@ -9,7 +9,6 @@ FIND_PACKAGE( OpenCV REQUIRED )
 ADD_DEFINITIONS( ${PCL_DEFINITIONS} )
 INCLUDE_DIRECTORIES( ${PCL_INCLUDE_DIRS}  )
 INCLUDE_DIRECTORIES("/usr/include/ni")
-INCLUDE_DIRECTORIES("/usr/include/openni2")
 LINK_LIBRARIES( ${PCL_LIBRARY_DIRS} )
 LINK_DIRECTORIES("/usr/lib")
 
@@ -27,7 +26,10 @@ ADD_LIBRARY( slambase slamBase.cpp )
 TARGET_LINK_LIBRARIES( slambase
     OpenNI
     ${OpenCV_LIBS}
+    octomap octomath
     ${PCL_LIBRARIES} )
+
+ADD_LIBRARY( utils utils.cpp )
 
 ADD_EXECUTABLE( visualOdometry visualOdometry.cpp)
 TARGET_LINK_LIBRARIES( visualOdometry
@@ -41,9 +43,8 @@ TARGET_LINK_LIBRARIES( slam
     slambase
     ${OpenCV_LIBS}
     ${PCL_LIBRARIES}
+    octomap octomath
     g2o_core g2o_types_slam3d g2o_solver_csparse g2o_stuff g2o_csparse_extension ${CSPARSE_LIBRARY})
 
 ADD_EXECUTABLE( main main.cpp)
-TARGET_LINK_LIBRARIES( main
-    utils
-    ${OpenCV_LIBS})
+TARGET_LINK_LIBRARIES( main utils )

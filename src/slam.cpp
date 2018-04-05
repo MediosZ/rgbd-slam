@@ -4,6 +4,7 @@
 using namespace std;
 
 #include "slamBase.h"
+#include "utils.h"
 
 #include <pcl/filters/voxel_grid.h>
 #include <pcl/filters/passthrough.h>
@@ -173,7 +174,42 @@ int main( int argc, char** argv )
     //存储
     pcl::io::savePCDFile( "./result.pcd", *tmp );
     viewer.showCloud( tmp );
-    cin.get();
+
+    /*
+    octomap::ColorOcTree tree( 0.05 );
+    pcl::PointXYZRGBA p;
+    for (auto p:tmp->points){
+      // 将点云里的点插入到octomap中
+      tree.updateNode( octomap::point3d(p.x, p.y, p.z), true );
+    }
+    // 设置颜色
+    for (auto p:tmp->points){
+      tree.integrateNodeColor( p.x, p.y, p.z, p.r, p.g, p.b );
+    }
+    // 更新octomap
+    tree.updateInnerOccupancy();
+    // 存储octomap, 注意要存成.ot文件而非.bt文件
+    tree.write( "octmap_result.ot" );
+*/
+    createOctmap(tmp);
+
+    pid_t pid = fork();
+    if(pid<0){
+      cout<<"error creating sub process"<<endl;
+    }
+    else if(pid == 0){
+      cout<<"Octovis successfully start"<<endl;
+      if(execlp("octovis", "octovis", "octmap_result.ot", "16", NULL) < 0){
+        perror("execute error");
+        return(1);
+      }
+    }
+    else {
+      wait(NULL);
+      cout<<"Octovis exited, main exit"<<endl;
+    }
+
+    //cin.get();
 
     cout<<"Final map is saved."<<endl;
     return 0;
