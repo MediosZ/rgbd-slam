@@ -1,5 +1,18 @@
 
 # pragma once
+/*
+#include <stdlib.h>
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <XnCppWrapper.h>
+#include "opencv/cv.h"
+#include "opencv/highgui.h"
+#include "opencv2/imgproc/imgproc.hpp"
+*/
+
+
+
 
 // 各种头文件
 // C++标准库
@@ -51,6 +64,8 @@ struct RESULT_OF_PNP
     cv::Mat rvec, tvec;
     int inliers;
 };
+int Capture();
+
 
 // 函数接口
 // image2PonitCloud 将rgb图转换为点云
